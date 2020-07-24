@@ -60,7 +60,10 @@
       thisProduct.data = data;
 
       thisProduct.renderInMenu();
+      thisProduct.getElements();
       thisProduct.initAccordion();
+      thisProduct.initOrderForm();
+      thisProduct.procesOrder();
 
       console.log('new Product:', thisProduct);
     }
@@ -81,11 +84,21 @@
       menuContainer.appendChild(thisProduct.element);
     }
 
+    getElements(){
+      const thisProduct = this;
+
+      thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable); // akordeon
+      thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form); // formularz zamowienia produktu
+      thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs); // formularz - checkboxy, selecty, itp
+      thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
+      thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+    }
+
     initAccordion(){
       const thisProduct = this;
 
       /* find the clickable trigger (the element that should react to clicking) */
-      thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      //thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
       /* START: click event listener to trigger */
       thisProduct.accordionTrigger.addEventListener('click',function(event) {
         /* prevent default action for event */
@@ -107,6 +120,40 @@
         /* END: click event listener to trigger */
       });
     }
+
+    initOrderForm(){
+      const thisProduct = this;
+
+      thisProduct.form.addEventListener('submit', function(event){
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
+
+      for(let input of thisProduct.formInputs){
+        input.addEventListener('change', function(){
+          thisProduct.processOrder();
+        });
+      }
+
+      thisProduct.cartButton.addEventListener('click', function(event){
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
+
+    }
+
+    procesOrder(){
+      const thisProduct = this;
+
+      console.log('procesOrder',this.procesOrder);
+
+
+    }
+
+
+
+
+
   }
 
   const app = {
