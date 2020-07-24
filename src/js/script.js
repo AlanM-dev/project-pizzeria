@@ -63,7 +63,7 @@
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
-      thisProduct.procesOrder();
+      thisProduct.processOrder();
 
       console.log('new Product:', thisProduct);
     }
@@ -142,7 +142,7 @@
 
     }
 
-    procesOrder(){
+    processOrder(){
       const thisProduct = this;
       const formData = utils.serializeFormToObject(thisProduct.form);
       console.log('formData:', formData);
