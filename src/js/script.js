@@ -92,6 +92,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs); // formularz - checkboxy, selecty, itp
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion(){
@@ -167,6 +168,17 @@
           } else if(!optionSelected && option.default){
             /* deduct price of option from price */
             price = price - option.price;
+          }
+          const optionImages = thisProduct.imageWrapper.querySelectorAll('.' + paramId + '-' + optionId);
+          console.log('IMAGES:', optionImages);
+          if(optionSelected){
+            for(let optionImage of optionImages){
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            }
+          } else {
+            for(let optionImage of optionImages){
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
+            }
           }
           /* END ELSE IF: if option is not selected and option is default */
         }
