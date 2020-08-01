@@ -1,6 +1,6 @@
 /* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
-const { utils } = require("stylelint");
+//const { utils } = require("stylelint");
 
 {
   'use strict';
