@@ -1,44 +1,47 @@
-import {templates, settings, classNames, select} from '../settings.js';
+import {settings, select, classNames, templates} from '../settings.js';
 import utils from '../utils.js';
 import CartProduct from './CartProduct.js';
-
 class Cart{
   constructor(element){
-    const thisCart = this;
+    const thisCart = this; //stała thisCart w której zapisuje obiekt this 
+    console.log(thisCart);
 
-    thisCart.products = [];
+    thisCart.products = []; //tablica do przechowywania produktów dodanych do koszyka
 
     thisCart.getElements(element);
+
     thisCart.initActions();
 
-    //console.log('New CART:', thisCart);
-
     thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
+    // console.log('new Cart', thisCart);
   }
 
   getElements(element){
     const thisCart = this;
 
-    thisCart.dom = {};
+    thisCart.dom = {}; // obiekt w którym będą przechowywane wszystkie elementy DOM, wyszukane w komponencie koszyka
 
     thisCart.dom.wrapper = element;
+      
     thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
-    thisCart.dom.productList = document.querySelector(select.cart.productList);
+    thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
     thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
     thisCart.dom.phone = thisCart.dom.wrapper.querySelector('input[name="phone"]');
     thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
-
     thisCart.renderTotalsKeys = ['totalNumber', 'totalPrice', 'subtotalPrice', 'deliveryFee'];
 
-    for(let key of thisCart.renderTotalsKeys){
+    for (let key of thisCart.renderTotalsKeys){
       thisCart.dom[key] = thisCart.dom.wrapper.querySelectorAll(select.cart[key]);
     }
+      
+
   }
 
   initActions(){
     const thisCart = this;
-
-    thisCart.dom.toggleTrigger.addEventListener('click', function(){
+    //ne elemencie thisCart.dom.toggleTrigger dodajemy listener eventu 'click'
+    thisCart.dom.toggleTrigger.addEventListener('click', function () {
+      //Handler tego listenera ma toggle'ować klasę zapisaną w classNames.cart.wrapperActive na elemencie thisCart.dom.wrapper
       thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
     });
 
@@ -92,16 +95,26 @@ class Cart{
   }
 
   add(menuProduct){
+    //const thisProduct = this; 
+    console.log('adding product', menuProduct);
+
     const thisCart = this;
-
-    console.log('ADDING PRODUCT:', menuProduct);
-
+      
+    /* generate HTML based on template*/
     const generatedHTML = templates.cartProduct(menuProduct);
+     
+    /* create element using utils.createElementFromHTML */
     const generatedDOM = utils.createDOMFromHTML(generatedHTML);
-    thisCart.dom.productList.appendChild(generatedDOM);
+    console.log('dom', generatedDOM);
+    /* add element to menu */
+    const cartProductList = thisCart.dom.productList;
 
-    thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
-    console.log('thisCart.products:', thisCart.products);
+    cartProductList.appendChild(generatedDOM);
+    console.log('cartProductList', cartProductList);
+
+    // thisCart.products.push(menuProduct);
+    thisCart.products.push(new CartProduct(menuProduct, generatedDOM)); //jednoczesnie tworzę nową instancję klasy i dodaje ją do tablicy thisCart.products
+    console.log('thisCart.products', thisCart.products);
 
     this.update();
   }
@@ -129,14 +142,13 @@ class Cart{
   }
 
   remove(cartProduct){
-    const thisCart = this;
-    const index = thisCart.products.indexOf(cartProduct);
+    const thisCart = this; 
+    const index = thisCart.products.indexOf(cartProduct); 
     thisCart.products.splice(index);
     cartProduct.dom.wrapper.remove();
 
     thisCart.update();
   }
-
 }
 
 export default Cart;
